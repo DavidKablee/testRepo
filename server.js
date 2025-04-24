@@ -7,6 +7,7 @@ import User from './src/models/User.js';
 import Report from './src/models/Report.js';
 
 const app = express();
+const port = process.env.PORT || 4000;
 
 // Connect to MongoDB
 connectDB();
