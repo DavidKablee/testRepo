@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import axios from 'axios';
 import "./styles.css";
 
 function SignUp() {
@@ -11,19 +12,33 @@ function SignUp() {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-    } else {
-      console.log("Registration Data:", formData);
-      alert("Registration successful!");
+      setError("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (response.data.token) {
+        navigate('/login');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed');
     }
   };
 
@@ -66,6 +81,7 @@ function SignUp() {
       </div>
       <form className="login-form" onSubmit={handleSubmit}>
         <h2>Register</h2>
+        {error && <div className="error-message">{error}</div>}
         <div className="form-group">
           <label>Full Name:</label>
           <input

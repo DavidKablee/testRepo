@@ -1,65 +1,117 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, Drawer, List, ListItem, ListItemText, Switch, FormControlLabel } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { green } from "@mui/material/colors";
-import { Link } from "react-router-dom";
-import { FormControlLabel, Switch } from "@mui/material";
+import "./NavigationMenu.css";
 
-export default function NavigationMenu({ visible, setVisible }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const toggleVisibility = () => {
-    if (visible) {
-      setVisible(false);
-    } else {
-      setVisible(true);
+const NavigationMenu = ({ visible, setVisible }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    navigate('/login');
+    setIsOpen(false);
+  };
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
     }
+    setIsOpen(open);
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const menuItems = [
+    ...(isLoggedIn ? [
+      { text: 'Dashboard', path: '/dashboard' }
+    ] : [
+      { text: 'Login', path: '/login' },
+      { text: 'Sign Up', path: '/signup' }
+    ])
+  ];
 
   return (
-    <div>
+    <div className="navigation-menu">
       <Button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-      >
-        <MenuIcon sx={{ color: green[300], fontSize: 28 }} />
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
+        onClick={toggleDrawer(true)}
+        sx={{
+          color: "green",
+          padding: "10px",
+          borderRadius: "10px",
+          fontSize: 12,
+          boxShadow: "none",
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <Link to="/dashboard" className="Link">
-            DashBoard
-          </Link>
-        </MenuItem>
-        {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
-        <MenuItem onClick={handleClose}><Link to="/login" className="Link">Login</Link> </MenuItem>
-        <MenuItem onClick={handleClose}><Link to="/signup" className="Link">Signup</Link> </MenuItem>
-        <MenuItem className="home-switch">
-          <FormControlLabel
-            control={<Switch defaultChecked onChange={toggleVisibility} />}
-            label="Show Info"
-          />
-        </MenuItem>
-      </Menu>
+        <MenuIcon />
+      </Button>
+      <Drawer
+        anchor="left"
+        open={isOpen}
+        onClose={toggleDrawer(false)}
+      >
+        <div
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+          className="drawer-content"
+        >
+          <List>
+            {menuItems.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                component={Link}
+                to={item.path}
+                sx={{
+                  color: "green",
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                  }
+                }}
+              >
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+            {isLoggedIn && (
+              <ListItem
+                button
+                onClick={handleLogout}
+                sx={{
+                  color: "green",
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                  }
+                }}
+              >
+                <ListItemText primary="Logout" />
+              </ListItem>
+            )}
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={visible}
+                    onChange={(e) => setVisible(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="Show Info"
+              />
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
     </div>
   );
-}
+};
+
+export default NavigationMenu;
