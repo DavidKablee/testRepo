@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import axios from 'axios';
 import "./styles.css";
+import { API_ENDPOINTS } from '../../config/api';
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ function Login() {
 
     try {
       console.log('Attempting login with email:', email);
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post(API_ENDPOINTS.LOGIN, {
         email,
         password
       }, {
@@ -43,16 +44,12 @@ function Login() {
       if (err.code === 'ECONNABORTED') {
         setError('Connection timed out. Please check if the server is running.');
       } else if (err.code === 'ERR_NETWORK') {
-        setError('Cannot connect to server. Please make sure the server is running at http://localhost:5000');
+        setError('Cannot connect to server. Please check if the server is running.');
       } else if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         setError(err.response.data.message || 'Invalid email or password');
       } else if (err.request) {
-        // The request was made but no response was received
-        setError('No response from server. Please check if the server is running at http://localhost:5000');
+        setError('No response from server. Please check if the server is running.');
       } else {
-        // Something happened in setting up the request that triggered an Error
         setError('An error occurred. Please try again.');
       }
     } finally {

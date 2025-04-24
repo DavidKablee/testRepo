@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const ReportsTable = ({ onReportAdded, isDarkMode }) => {
   const [reports, setReports] = useState([]);
@@ -29,7 +30,7 @@ const ReportsTable = ({ onReportAdded, isDarkMode }) => {
         return;
       }
 
-      const response = await axios.get('http://localhost:5000/api/reports', {
+      const response = await axios.get(API_ENDPOINTS.REPORTS, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

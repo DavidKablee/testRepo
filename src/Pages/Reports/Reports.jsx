@@ -15,6 +15,7 @@ import FloatingButton from "../../components/FloatingButton/FloatingButton";
 import ReportsTable from "../../components/ReportsTable/ReportsTable";
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../../config/api';
 
 const Reports = () => {
   const theme = useTheme();
@@ -42,7 +43,7 @@ const Reports = () => {
       }
 
       // Fetch user data
-      const userResponse = await axios.get('http://localhost:5000/api/auth/me', {
+      const userResponse = await axios.get(API_ENDPOINTS.USER_DATA, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -50,7 +51,7 @@ const Reports = () => {
       setUser(userResponse.data);
 
       // Fetch statistics
-      const statsResponse = await axios.get('http://localhost:5000/api/reports/stats', {
+      const statsResponse = await axios.get(API_ENDPOINTS.REPORTS_STATS, {
         headers: {
           Authorization: `Bearer ${token}`
         }

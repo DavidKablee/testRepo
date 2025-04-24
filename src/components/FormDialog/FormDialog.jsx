@@ -18,6 +18,7 @@ import axios from 'axios';
 import "./FormDialog.css";
 import CustomTooltip from '../CustomTooltip/CustimToolTip';
 import CloseIcon from '@mui/icons-material/Close';
+import { API_ENDPOINTS } from '../../config/api';
 
 export default function FormDialog({ open, setOpen }) {
   const [screen, setScreen] = useState(false);
@@ -59,7 +60,7 @@ export default function FormDialog({ open, setOpen }) {
 
       console.log('Submitting form data:', formData);
 
-      const response = await axios.post('http://localhost:5000/api/reports', {
+      const response = await axios.post(API_ENDPOINTS.REPORTS, {
         ...formData,
         location: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.country}`,
         description: `Title: ${formData.title}\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nAddress: ${formData.address}`,
@@ -90,17 +91,13 @@ export default function FormDialog({ open, setOpen }) {
     } catch (err) {
       console.error('Error submitting report:', err);
       if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.error('Error response data:', err.response.data);
         console.error('Error response status:', err.response.status);
         setError(err.response.data.message || `Server error: ${err.response.status}`);
       } else if (err.request) {
-        // The request was made but no response was received
         console.error('No response received:', err.request);
-        setError('No response from server. Please check if the server is running at http://localhost:5000');
+        setError('No response from server. Please check if the server is running.');
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.error('Error setting up request:', err.message);
         setError('Error setting up request: ' + err.message);
       }
