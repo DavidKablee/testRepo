@@ -15,7 +15,7 @@ import FloatingButton from "../../components/FloatingButton/FloatingButton";
 import ReportsTable from "../../components/ReportsTable/ReportsTable";
 import { useTheme as useCustomTheme } from '../../context/ThemeContext';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS } from '../../../backend/config/api';
 
 const Reports = () => {
   const theme = useTheme();

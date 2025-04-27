@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS } from '../../../backend/config/api';
 
 const ReportsTable = ({ onReportAdded, isDarkMode }) => {
   const [reports, setReports] = useState([]);

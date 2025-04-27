@@ -2,12 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { connectDB } from './src/config/db.js';
-import User from './src/models/User.js';
-import Report from './src/models/Report.js';
+import { connectDB } from './config/db.js';
+import User from './models/User.js';
+import Report from './models/Report.js';
 
 const app = express();
-const port = process.env.PORT || 4000;
 
 // Connect to MongoDB
 connectDB();

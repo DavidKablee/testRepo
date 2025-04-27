@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import axios from 'axios';
 import "./styles.css";
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS } from '../../../backend/config/api';
 
 function Login() {
   const [email, setEmail] = useState("");

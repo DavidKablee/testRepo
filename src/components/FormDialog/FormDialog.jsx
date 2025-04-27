@@ -18,7 +18,7 @@ import axios from 'axios';
 import "./FormDialog.css";
 import CustomTooltip from '../CustomTooltip/CustimToolTip';
 import CloseIcon from '@mui/icons-material/Close';
-import { API_ENDPOINTS } from '../../config/api';
+import { API_ENDPOINTS } from '../../../backend/config/api';
 
 export default function FormDialog({ open, setOpen }) {
   const [screen, setScreen] = useState(false);
